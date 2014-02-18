@@ -3,17 +3,19 @@
 Взаимодействие происходит через Unix-сокет `/tmp/2safe.sock`
 
 Настоящий протокол содержит спецификацию сообщений для:
-* Управление настройками;
+* Управления настройками;
+* Выполнения действий;
 * Совершения вызовов API;
-* Оповещения об событиях.
+* Оповещения о событиях.
 
 #### Настройки
 ##### *settings* # набор значений для определённых полей
 ##### *set_settings* # установка значений для определённых полей
 ```json
-запрос: {
+запрос
+{
   "type": "set_settings",
-  args: {
+  "args": {
     "login": "FooBaz",
     "email": "foo@baz.com"
   }
@@ -21,27 +23,83 @@
 ```
 ##### *get_settings* # получение значений для определённых полей
 ```json
-запрос: {
+запрос
+{
   "type": "get_settings",
   "fields": ["login", "email"]
 }
 
-ответ: {
+ответ
+{
   "type": "settings",
-  values: {
+  "values": {
     "login": "FooBaz",
     "email": "foo@baz.com"
   }
 }
 ```
-#### Вызовы API
-##### *call_api* # вызов метода API (см. [safecalls.h](https://github.com/Xlab/lib2safe/blob/master/safecalls.h))
+#### Действия
+##### *action* # совершение какого-либо действия
 ```json
-запрос: {
+{
+  "type": "action",
+  "verb": "get_public_link",
+  "args": { "file": "AK47/Верните сотку.mp3" }
+}
+```
+#### Вызовы API
+##### *call_api* # вызов метода [API](https://github.com/Xlab/lib2safe/blob/master/safecalls.h)
+```json
+{
   "type": "call_api",
-  "call": "chk_mail"
-  args: { "email": "foo@baz.com" }
+  "call": "chk_mail",
+  "args": { "email": "foo@baz.com" }
 }
 ```
 
-#### События изменения состояни##### *event*dfdf
+#### События изменений состояния
+##### *event* # набор новых значений состояния
+```json
+пример1
+{
+  "type": "event",
+  "category": "disk_quota",
+  "values": {
+    "used_bytes": "5400000",
+    "total_bytes": "10240000"
+  }
+}
+
+пример2
+{
+  "type": "event",
+  "category": "file_progress",
+  "values": {
+    "id": "830",
+    "bytes": "5120",
+    "total_bytes": "102400"
+  }
+}
+
+пример3
+{
+  "type": "event",
+  "category": "action_result",
+  "values": {
+    "action": "get_public_link",
+    "file": "AK47/Верните сотку.mp3",
+    "result": "http://2safe.com/332fwfdss/sd3r3/sd3/md5.mp3"
+  }
+}
+
+пример4
+{
+  "type": "event",
+  "category": "api_result",
+  "values": {
+    "call": "chk_mail",
+    "email": "foo@baz.com",
+    "result": "true"
+  }
+}
+```
