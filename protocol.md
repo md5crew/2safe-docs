@@ -48,10 +48,10 @@
 }
 ```
 #### Вызовы API
-##### *call_api* # вызов метода [API](https://github.com/Xlab/lib2safe/blob/master/safecalls.h)
+##### *api_call* # вызов метода [API](https://github.com/Xlab/lib2safe/blob/master/safecalls.h)
 ```json
 {
-  "type": "call_api",
+  "type": "api_call",
   "call": "chk_mail",
   "args": { "email": "foo@baz.com" }
 }
